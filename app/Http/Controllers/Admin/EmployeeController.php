@@ -13,7 +13,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $query = request('search');
-
+    
         // Filter employees based on search query
         $employees = Employee::when($query, function ($q) use ($query) {
             $q->where('user_id', 'like', "%$query%")
@@ -26,14 +26,24 @@ class EmployeeController extends Controller
               ->orWhereHas('department', function ($subQuery) use ($query) {
                   $subQuery->where('name', 'like', "%$query%");
               });
-        })->where('status1', 'approved') // Only show approved employees
-          ->paginate(8)->withQueryString();
-
+        })->where('status1', 'approved')->paginate(8); // 🔥 Changed get() back to paginate() for Blade pagination
+    
         $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
         $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
-
+    
+        // 🔥 Check if request is JSON (API) or standard (Blade)
+        if (request()->wantsJson()) {
+            return response()->json([
+                'employees' => $employees->items(), // Removes pagination metadata
+                'employment' => $employment,
+                'educational' => $educational,
+            ]);
+        }
+    
+        // Return Blade view if it's a normal request
         return view('admin.employees.index', compact('employees', 'employment', 'educational'));
     }
+    
 
     public function destroy($id)
     {

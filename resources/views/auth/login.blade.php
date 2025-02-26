@@ -9,6 +9,10 @@
         </div>
     @endif
 
+    @if(request()->has('session_expired'))
+    <p class="text-red-500 text-center">You were logged out due to inactivity.</p>
+    @endif
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 

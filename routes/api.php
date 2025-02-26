@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+use App\Http\Controllers\Admin\EmployeeController;
+
+
+// API Employee Records with Authentication and Employee Status Check
+Route::middleware(['auth:sanctum', 'admin', 'employee.status'])->group(function () {
+    Route::get('/admin/employees', [EmployeeController::class, 'apiIndex'])->name('api.admin.employees.index');
+});
+

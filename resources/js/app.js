@@ -55,3 +55,42 @@ document
             }
         });
     });
+
+
+    let timeout;
+
+    // Get CSRF token and logout URL from meta tags
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const logoutUrl = document.querySelector('meta[name="logout-url"]').content;
+    
+    function startTimer() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            logoutUser();
+        }, 500000); // 5 minutes
+    }
+    
+    function logoutUser() {
+        fetch(logoutUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Content-Type": "application/json"
+            },
+            credentials: "same-origin"
+        }).then(() => {
+            window.localStorage.clear(); // Clear session storage
+            window.location.href = "/login?session_expired=true"; // Redirect to login with message
+        });
+    }
+    
+    // Listen for user activity to reset the timer
+    document.addEventListener("mousemove", startTimer);
+    document.addEventListener("keydown", startTimer);
+    document.addEventListener("click", startTimer);
+    document.addEventListener("scroll", startTimer);
+    
+    startTimer();
+    
+
+

@@ -39,6 +39,14 @@ Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
 
+
+use App\Http\Controllers\Api\EmployeeAPIController;
+
+Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
+    Route::get('/admin/index', [EmployeeAPIController::class, 'index'])->name('admin.index');
+});
+
+
 Route::middleware(['auth', 'employee', 'employee.status'])->group(function () {
     Route::get('/employee/dashboard', [EmployeeDashboardController::class, 'index'])->name('employee.dashboard');
 });
