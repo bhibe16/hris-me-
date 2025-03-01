@@ -40,50 +40,70 @@
                 </div>
             </div>
 
-            <div id="cardLayout" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+             <!-- Card Layout -->
+<div id="cardLayout" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
     @forelse ($employees as $employee)
-        <div class="flex flex-col items-center mb-8 bg-white p-6 rounded-lg cursor-pointer hover:shadow-lg transition min-h-[300px] w-50 relative"
-            onclick="toggleModal('modal-{{ $employee->id }}')">
-            <!-- Circle on the left side -->
-            <div class="absolute left-4 top-4">
-                <div class="status-circle 
-                    @if($employee->status == 'Active') active 
-                    @elseif($employee->status == 'Inactive') inactive 
-                    @elseif($employee->status == 'On Leave') on-leave 
-                    @elseif($employee->status == 'Terminated') terminated 
-                    @endif">
-                </div>
-            </div>
+    <div class="flex flex-col items-center mb-8 bg-white p-6 rounded-lg cursor-pointer hover:shadow-lg transition min-h-[300px] w-50 relative"
+        onclick="toggleModal('modal-{{ $employee->id }}')">
+        <!-- Profile Picture -->
+        <img src="{{ asset('storage/' . $employee->profile_picture) }}" alt="Profile Picture"
+            class="w-24 h-24 rounded-full border border-gray-300 shadow-md mb-4">
+        
+        <!-- Employee Name with Status Color -->
+        <p class="font-bold text-lg mb-2 @if($employee->status == 'approved') text-green-600 
+            @elseif($employee->status == 'reject') text-red-600 
+            @else text-blue-800 @endif">
+            {{ $employee->first_name }} {{ $employee->last_name }}
+        </p>
+        
+        <!-- Position and Department -->
+        <p class="text-gray-500 text-center">{{ $employee->position->name }}</p>
+        <p class="text-gray-500 mb-2 text-center">{{ $employee->department->name }}</p>
 
-            <img src="{{ asset('storage/' . $employee->profile_picture) }}" alt="Profile Picture"
-                class="w-24 h-24 rounded-full border border-gray-300 shadow-md mb-4">
-            <p class="font-bold text-lg mb-2 
-                @if($employee->status == 'Inactive') text-red-500 
-                @elseif($employee->status == 'On Leave') text-blue-500 
-                @endif">
-                {{ $employee->first_name }} {{ $employee->last_name }}
-            </p>
-            <p class="text-gray-500 text-center">{{ $employee->position->name }}</p>
-            <p class="text-gray-500 mb-4 text-center">{{ $employee->department->name }}</p>
-
-            <div class="flex flex-col items-start w-full space-y-3 rounded-sm p-5 bg-gray-100">
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-medium">Employee ID:</label>
-                    <p class="text-sm text-gray-700">{{ $employee->user_id }}</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-medium">Email:</label>
-                    <p class="text-sm text-gray-700">{{ $employee->email }}</p>
-                </div>
+        <!-- Employee Info Section with Eye Icon -->
+        <div class="flex flex-col items-start w-full space-y-3 rounded-sm p-5 bg-gray-100">
+            <div class="flex items-center space-x-2">
+    <label class="text-sm font-medium">Employee ID:</label>
+    <p class="text-sm @if($employee->status == 'approved') text-green-600 
+        @elseif($employee->status == 'reject') text-red-600 
+        @else text-blue-800 @endif">
+        {{ $employee->user_id }}
+    </p>
+</div>
+            <div class="flex items-center space-x-2">
+                <label class="text-sm font-medium">Email:</label>
+                <p class="text-sm text-gray-700">{{ $employee->email }}</p>
             </div>
         </div>
+        <br>
+        <button onclick="toggleModal('modal-{{ $employee->id }}', event)" 
+        class="modal-button text-gray-600 hover:text-yellow-600 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+</button>
+
+        <!-- Status Dropdown -->
+        <select class="w-full px-3 py-1 rounded-full text-sm border focus:outline-none focus:ring 
+               {{ $employee->status === 'approved' ? 'bg-green-200 text-green-700 border-green-500' : '' }}
+               {{ $employee->status === 'reject' ? 'bg-red-200 text-red-700 border-red-500' : '' }}
+               {{ $employee->status === 'pending' ? 'bg-blue-200 text-blue-700 border-blue-500' : '' }}"
+        data-employee-id="{{ $employee->id }}"
+        onchange="updateStatus(this)">
+    <option value="pending" @selected($employee->status == 'pending')>Pending</option>
+    <option value="approved" @selected($employee->status == 'approved')>Approved</option>
+    <option value="reject" @selected($employee->status == 'reject')>Reject</option>
+</select>
+    </div>
     @empty
-        <div class="col-span-full text-center text-red-500 text-lg py-4">
-            No records found.
-        </div>
+    <div class="col-span-full text-center text-red-500 text-lg py-4">
+        No records found.
+    </div>
     @endforelse
 </div>
 
+<!-- Table Layout -->
 <div id="tableLayout" class="hidden overflow-x-auto bg-white">
     <table class="w-full border-collapse border border-gray-200">
         <thead class="linear-gradient">
@@ -94,53 +114,71 @@
                 <th class="border border-gray-300 px-4 py-2 text-center">Position</th>
                 <th class="border border-gray-300 px-4 py-2 text-center">Department</th>
                 <th class="border border-gray-300 px-4 py-2 text-center">Email</th>
+                <th class="border border-gray-300 px-4 py-2 text-center">Status</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($employees as $employee)
-                <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleModal('modal-{{ $employee->id }}')">
-                    <td class="border px-1 py-2 flex justify-center items-center relative">
-                        <!-- Circle on the left side of the profile picture -->
-                        <div class="absolute left-2 top-1 transform -translate-y-1/2">
-                            <div class="status-circle 
-                                @if($employee->status == 'Active') active 
-                                @elseif($employee->status == 'Inactive') inactive 
-                                @elseif($employee->status == 'On Leave') on-leave 
-                                @elseif($employee->status == 'Terminated') terminated 
-                                @endif">
-                            </div>
-                        </div>
-                        <img src="{{ asset('storage/' . $employee->profile_picture) }}" alt="Profile Picture"
-                            class="w-12 h-12 rounded-full">
-                    </td>
-                    <td class="border px-4 py-2 text-center">{{ $employee->user_id }}</td>
-                    <td class="border px-4 py-2 text-center 
-                        @if($employee->status == 'Inactive') text-red-500 
-                        @elseif($employee->status == 'On Leave') text-blue-500 
-                        @endif">
-                        {{ $employee->first_name }} {{ $employee->last_name }}
-                    </td>
-                    <td class="border px-4 py-2 text-center">{{ $employee->position->name }}</td>
-                    <td class="border px-4 py-2 text-center">{{ $employee->department->name }}</td>
-                    <td class="border px-4 py-2 text-center">{{ $employee->email }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-center py-4 text-red-500">No records found.</td>
-                </tr>
-            @endforelse
-        </tbody>
+    @forelse ($employees as $employee)
+    <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleModal('modal-{{ $employee->id }}')">
+        <td class="border px-1 py-2 flex justify-center items-center relative">
+            <img src="{{ asset('storage/' . $employee->profile_picture) }}" alt="Profile Picture"
+                class="w-12 h-12 rounded-full">
+        </td>
+        <!-- Employee ID with the same color as Name -->
+        <td class="border px-4 py-2 text-center @if($employee->status == 'approved') text-green-600 
+            @elseif($employee->status == 'reject') text-red-600 
+            @else text-blue-800 @endif">
+            {{ $employee->user_id }}
+        </td>
+        <!-- Employee Name with Status Color -->
+        <td class="border px-4 py-2 text-center @if($employee->status == 'approved') text-green-600 
+            @elseif($employee->status == 'reject') text-red-600 
+            @else text-blue-800 @endif">
+            {{ $employee->first_name }} {{ $employee->last_name }}
+        </td>
+        <td class="border px-4 py-2 text-center">{{ $employee->position->name }}</td>
+        <td class="border px-4 py-2 text-center">{{ $employee->department->name }}</td>
+        <td class="border px-4 py-2 text-center">{{ $employee->email }}</td>
+        <td class="border px-4 py-2 text-center">
+            <div class="flex items-center gap-2">
+                <button onclick="toggleModal('modal-{{ $employee->id }}', event)" 
+                    class="modal-button text-gray-600 hover:text-yellow-600 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </button>
+                <select class="w-full px-3 py-1 rounded-full text-sm border focus:outline-none focus:ring 
+                       {{ $employee->status === 'approved' ? 'bg-green-200 text-green-700 border-green-500' : '' }}
+                       {{ $employee->status === 'reject' ? 'bg-red-200 text-red-700 border-red-500' : '' }}
+                       {{ $employee->status === 'pending' ? 'bg-blue-200 text-blue-700 border-blue-500' : '' }}"
+                data-employee-id="{{ $employee->id }}"
+                onchange="updateStatus(this)">
+                    <option value="pending" @selected($employee->status == 'pending')>Pending</option>
+                    <option value="approved" @selected($employee->status == 'approved')>Approved</option>
+                    <option value="reject" @selected($employee->status == 'reject')>Reject</option>
+                </select>
+            </div>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="7" class="text-center py-4 text-red-500">No records found.</td>
+    </tr>
+    @endforelse
+</tbody>
     </table>
 </div>
 
 
 @foreach ($employees as $employee)
-    <div id="modal-{{ $employee->id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-slate-200 p-8 rounded-lg shadow-lg max-w-7xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold">Full Information</h2>
-                <button class="text-red-500" onclick="toggleModal('modal-{{ $employee->id }}')">X</button>
-            </div>
+   
+<div id="modal-{{ $employee->id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="modal-content bg-slate-200 p-8 rounded-lg shadow-lg max-w-7xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold">Full Information</h2>
+            <button class="text-red-500" onclick="toggleModal('modal-{{ $employee->id }}', event)">X</button>
+        </div>
             <div class="bg-white border border-gray-300 rounded-lg shadow-sm p-9 flex flex-col relative min-h-[200px]">
                 <div class="flex items-center space-x-6 w-full">
                     <div class="flex items-center space-x-6 w-1/2 pr-6">
@@ -257,24 +295,8 @@
                     </div>
                 </div>
 
-                <!-- Employee Status Update Form -->
-                <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
-                    <form action="{{ route('employees.updateStatus', $employee->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <h2 class="text-xl font-bold mb-4">Update Employee Status</h2>
-                        <label for="status-{{ $employee->id }}" class="block font-medium text-gray-700">Status:</label>
-                        <select name="status" id="status-{{ $employee->id }}" class="border border-gray-300 rounded-lg px-4 py-2 w-full mt-2">
-                            <option value="Active" {{ $employee->status == 'Active' ? 'selected' : '' }}>Active</option>
-                            <option value="Inactive" {{ $employee->status == 'Inactive' ? 'selected' : '' }}>Inactive</option>
-                            <option value="On Leave" {{ $employee->status == 'On Leave' ? 'selected' : '' }}>On Leave</option>
-                            <option value="Terminated" {{ $employee->status == 'Terminated' ? 'selected' : '' }}>Terminated</option>
-                        </select>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 mt-4">
-                            Update Status
-                        </button>
-                    </form>
-                </div>
+            
+                
             </div>
             <!-- Delete Button and Form -->
             <div class="mt-6 flex justify-end">
@@ -295,45 +317,72 @@
     </div>
 
     <script>
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.toggle('hidden');
+       function toggleModal(modalId, event) {
+    if (event) event.stopPropagation(); // Prevents event bubbling
+
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.toggle('hidden');
+
+        // If modal is shown, add event listener to close when clicking outside
+        if (!modal.classList.contains('hidden')) {
+            document.addEventListener('click', function closeModal(e) {
+                if (!modal.querySelector('.modal-content').contains(e.target)) {
+                    modal.classList.add('hidden');
+                    document.removeEventListener('click', closeModal);
+                }
+            });
         }
+    } else {
+        console.error(`Modal with ID '${modalId}' not found`);
+    }
+}
 
-        window.onload = function() {
-            const savedLayout = localStorage.getItem('layout');
-            const cardLayout = document.getElementById('cardLayout');
-            const tableLayout = document.getElementById('tableLayout');
-            const toggleButton = document.getElementById('toggleButton');
-
-            if (savedLayout === 'card') {
-                cardLayout.classList.remove('hidden');
-                tableLayout.classList.add('hidden');
-                toggleButton.textContent = 'Table View';
-            } else {
-                cardLayout.classList.add('hidden');
-                tableLayout.classList.remove('hidden');
-                toggleButton.textContent = 'Card View';
-            }
-        };
-
-        function toggleLayout() {
-            const cardLayout = document.getElementById('cardLayout');
-            const tableLayout = document.getElementById('tableLayout');
-            const toggleButton = document.getElementById('toggleButton');
-
-            if (cardLayout.classList.contains('hidden')) {
-                cardLayout.classList.remove('hidden');
-                tableLayout.classList.add('hidden');
-                toggleButton.textContent = 'Table View';
-                localStorage.setItem('layout', 'card');
-            } else {
-                cardLayout.classList.add('hidden');
-                tableLayout.classList.remove('hidden');
-                toggleButton.textContent = 'Card View';
-                localStorage.setItem('layout', 'table');
-            }
+// Prevent other elements like table rows from opening the modal
+document.querySelectorAll(".employee-row").forEach(row => {
+    row.addEventListener("click", function(event) {
+        if (!event.target.closest(".modal-button")) {
+            event.stopPropagation();
         }
+    });
+});
+
+window.onload = function() {
+    const savedLayout = localStorage.getItem('layout');
+    const cardLayout = document.getElementById('cardLayout');
+    const tableLayout = document.getElementById('tableLayout');
+    const toggleButton = document.getElementById('toggleButton');
+
+    if (savedLayout === 'card') {
+        cardLayout.classList.remove('hidden');
+        tableLayout.classList.add('hidden');
+        toggleButton.textContent = 'Table View';
+    } else {
+        cardLayout.classList.add('hidden');
+        tableLayout.classList.remove('hidden');
+        toggleButton.textContent = 'Card View';
+    }
+};
+
+function toggleLayout() {
+    const cardLayout = document.getElementById('cardLayout');
+    const tableLayout = document.getElementById('tableLayout');
+    const toggleButton = document.getElementById('toggleButton');
+
+    if (cardLayout.classList.contains('hidden')) {
+        cardLayout.classList.remove('hidden');
+        tableLayout.classList.add('hidden');
+        toggleButton.textContent = 'Table View';
+        localStorage.setItem('layout', 'card');
+    } else {
+        cardLayout.classList.add('hidden');
+        tableLayout.classList.remove('hidden');
+        toggleButton.textContent = 'Card View';
+        localStorage.setItem('layout', 'table');
+    }
+}
+
+
         document.getElementById("searchInput").addEventListener("keyup", function() {
     let query = this.value.toLowerCase();
     let cardEmployees = document.querySelectorAll("#cardLayout > div");
@@ -380,6 +429,43 @@
     document.getElementById("noCardMessage").style.display = cardFound ? "none" : "block";
     document.getElementById("noTableMessage").style.display = tableFound ? "none" : "table-row";
 });
+function updateStatus(selectElement) {
+    const employeeId = selectElement.dataset.employeeId;
+    const newStatus = selectElement.value;
+    const originalValue = selectElement.dataset.originalValue;
+
+    fetch(`/employees/${employeeId}/update-status`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Update failed');
+
+        // Update select background color dynamically
+        selectElement.classList.remove('bg-green-200', 'text-green-700', 'border-green-500', 
+                                       'bg-red-200', 'text-red-700', 'border-red-500', 
+                                       'bg-blue-200', 'text-blue-700', 'border-blue-500');
+
+        if (newStatus === 'approved') {
+            selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
+        } else if (newStatus === 'reject') {
+            selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
+        } else {
+            selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
+        }
+
+        // Refresh the page after successful update
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        selectElement.value = originalValue;
+    });
+}
 
 
     </script>

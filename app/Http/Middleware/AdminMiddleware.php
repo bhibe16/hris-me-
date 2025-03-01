@@ -20,7 +20,9 @@ class AdminMiddleware
         if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
-        
-        return redirect('/dashboard')->with('error', 'You do not have admin access.');
+
+        // Store intended redirect URL before redirecting to loading page
+        session(['redirect_url' => route('employee.dashboard')]);
+        return redirect('/loading');
     }
 }

@@ -23,7 +23,6 @@
             <!-- Employee Record Section -->
             <div>
                 @forelse ($record as $empRecord)
-                    @if($empRecord->status1 === 'approved')
                         <div class="bg-white border border-gray-300 rounded-lg shadow-sm p-9 flex flex-col relative min-h-[150px]">
                             <h2 class="text-3xl font-semibold -mt-7 -ml-5 text-gray-600">Profile</h2>
                             <!-- Settings Dropdown (Top-Right) -->
@@ -77,14 +76,6 @@
                                 </div>
                             </div>
                         </div>
-                    @else
-                        <div class="bg-white border border-gray-300 rounded-lg shadow-sm p-9 flex flex-col relative min-h-[150px]">
-                            <h2 class="text-3xl font-semibold -mt-7 -ml-5 text-black-500">Profile</h2>
-                            <div class="flex items-center justify-center h-full">
-                                <p class="text-xl text-yellow-500">Waiting for approval by admin</p>
-                            </div>
-                        </div>
-                    @endif
                 @empty
                     <!-- Show this card when there are no records -->
                     <div class="bg-white border border-gray-300 rounded-lg shadow-sm p-9 flex flex-col relative min-h-[150px]">
@@ -131,30 +122,28 @@
                 @endforelse
             </div>
 
-            <!-- Contact & Professional Details Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+             <!-- Contact & Professional Details Grid -->
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 @forelse ($record as $empRecord)
-                    @if($empRecord->status1 === 'approved')
-                        <!-- Contact Information -->
-                        <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
-                            <h2 class="text-xl mb-4">Contact Information</h2>
-                            <div class="space-y-2">
-                                <p><span class="w-60 inline-block ">Email:</span> {{ $empRecord->email ?? 'N/A' }}</p>
-                                <p><span class="w-60 inline-block">Phone:</span> {{ $empRecord->phone ?? 'N/A' }}</p>
-                                <p><span class="w-60 inline-block">Address:</span> {{ $empRecord->address ?? 'N/A' }}</p>
-                            </div>
+                    <!-- Contact Information -->
+                    <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                        <h2 class="text-xl mb-4">Contact Information</h2>
+                        <div class="space-y-2">
+                            <p><span class="w-60 inline-block">Email:</span> {{ $empRecord->email ?? 'N/A' }}</p>
+                            <p><span class="w-60 inline-block">Phone:</span> {{ $empRecord->phone ?? 'N/A' }}</p>
+                            <p><span class="w-60 inline-block">Address:</span> {{ $empRecord->address ?? 'N/A' }}</p>
                         </div>
+                    </div>
 
-                        <!-- Professional Details -->
-                        <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
-                            <h2 class="text-xl mb-4">Professional Details</h2>
-                            <div class="space-y-2">
-                                <p><span class="w-60 inline-block">Department:</span> {{ $empRecord->department->name ?? 'N/A' }}</p>
-                                <p><span class="w-60 inline-block">Position:</span> {{ $empRecord->position->name ?? 'N/A' }}</p>
-                                <p><span class="w-60 inline-block">Employment Status:</span> {{ $empRecord->employment_status ?? 'N/A' }}</p>
-                            </div>
+                    <!-- Professional Details -->
+                    <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                        <h2 class="text-xl mb-4">Professional Details</h2>
+                        <div class="space-y-2">
+                            <p><span class="w-60 inline-block">Department:</span> {{ $empRecord->department->name ?? 'N/A' }}</p>
+                            <p><span class="w-60 inline-block">Position:</span> {{ $empRecord->position->name ?? 'N/A' }}</p>
+                            <p><span class="w-60 inline-block">Employment Status:</span> {{ $empRecord->employment_status ?? 'N/A' }}</p>
                         </div>
-                    @endif
+                    </div>
                 @empty
                     <!-- Show empty details card -->
                     <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">

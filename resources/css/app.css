@@ -54,18 +54,5 @@
     margin-right: 8px;
 }
 
-.status-circle.active {
-    background-color: green; /* Green for Active */
-}
 
-.status-circle.inactive {
-    background-color: red; /* Red for Inactive */
-}
 
-.status-circle.on-leave {
-    background-color: blue; /* Blue for On Leave */
-}
-
-.status-circle.terminated {
-    background-color: gray; /* Gray for Terminated */
-}

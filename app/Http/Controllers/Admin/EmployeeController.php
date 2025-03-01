@@ -19,6 +19,7 @@ class EmployeeController extends Controller
             $q->where('user_id', 'like', "%$query%")
               ->orWhere('first_name', 'like', "%$query%")
               ->orWhere('last_name', 'like', "%$query%")
+              ->orWhere('status', 'like', "%$query%")
               ->orWhere('email', 'like', "%$query%")
               ->orWhereHas('position', function ($subQuery) use ($query) {
                   $subQuery->where('name', 'like', "%$query%");
@@ -26,7 +27,7 @@ class EmployeeController extends Controller
               ->orWhereHas('department', function ($subQuery) use ($query) {
                   $subQuery->where('name', 'like', "%$query%");
               });
-        })->where('status1', 'approved')->paginate(8); // 🔥 Changed get() back to paginate() for Blade pagination
+            })->paginate(8)->withQueryString(); // Keep search query when paginating
     
         $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
         $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
@@ -66,40 +67,27 @@ class EmployeeController extends Controller
 
         return redirect()->route('admin.employees.index')->with('success', 'Employee record restored successfully.');
     }
+    public function dashboard()
+    {
+        // Fetch employee-specific data
+        $employee = auth()->user(); // Get the authenticated employee
+        $records = $employee->records; // Assuming you have a relationship defined
+
+        return view('employees.dashboard', compact('employees', 'records'));
+    }
 
     public function updateStatus(Request $request, $id)
-    {
-        $employee = Employee::findOrFail($id);
-        $employee->status = $request->input('status'); // Use status1 field
-        $employee->save();
+{
+    $request->validate([
+        'status' => 'required|in:approved,pending,reject'
+    ]);
 
-        return redirect()->back()->with('success', 'Employee status updated successfully.');
-    }
+    $employee = Employee::findOrFail($id);
+    $employee->status = $request->status;
+    $employee->save();
 
-    // Show all pending records
-    public function pendingRecords()
-    {
-        $pendingRecords = Employee::where('status1', 'pending')->get();
-        return view('admin.employees.pendingrecord', compact('pendingRecords'));
-    }
+    return response()->json(['success' => true]);
+}
 
-    // Approve employee record
-    public function approveRecord($id)
-    {
-        $employee = Employee::findOrFail($id);
-        $employee->status1 = 'approved'; // Change status to approved
-        $employee->save();
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee approved successfully!');
-    }
-
-    // Reject employee record
-    public function rejectRecord($id)
-    {
-        $employee = Employee::findOrFail($id);
-        $employee->status1 = 'rejected'; // Change status to rejected
-        $employee->save();
-
-        return redirect()->route('admin.employees.pendingrecord')->with('error', 'Employee record rejected.');
-    }
 }

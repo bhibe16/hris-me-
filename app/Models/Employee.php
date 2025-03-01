@@ -28,8 +28,7 @@ class Employee extends Model
         'employment_status',
         'user_id',
         'profile_picture',
-        'status',
-        'status1'
+        'status'
     ];
 
     protected $dates = ['deleted_at']; // Track soft delete timestamp

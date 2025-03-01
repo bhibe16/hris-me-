@@ -19,7 +19,9 @@ class EmployeeMiddleware
         if (Auth::check() && Auth::user()->role === 'employee') {
             return $next($request);
         }
-        
-        return redirect('/dashboard')->with('error', 'You do not have employee access.');
+
+        // Store intended redirect URL before redirecting to loading page
+        session(['redirect_url' => route('admin.dashboard')]);
+        return redirect('/loading');
     }
 }

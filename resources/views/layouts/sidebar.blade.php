@@ -80,7 +80,6 @@
             <ul id="employees-submenu" class="submenu space-y-2 pl-8 hidden">
             @if (Auth::user()->role == 'admin')
                 <li><a href="{{ route('admin.employees.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Employee Records</a></li>
-                <li><a href="{{ route('admin.employees.pendingrecord') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Pending Employee Records</a></li>
             @elseif (Auth::user()->role == 'employee')
                 <li><a href="{{ route('employee.records.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">My records</a></li>
             @endif

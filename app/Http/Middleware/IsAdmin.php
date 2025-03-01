@@ -14,6 +14,6 @@ class IsAdmin
             return $next($request);
         }
 
-        return redirect('/')->with('error', 'Unauthorized access.');
+        return redirect('employee.dashboard')->with('error', 'Unauthorized access.');
     }
 }
