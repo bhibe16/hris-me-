@@ -9,6 +9,7 @@
 <body class="flex items-center justify-center h-screen bg-gray-100">
     <div class="text-center">
         <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        <p class="mt-4 text-gray-700 text-lg">YOUR IN WRONG PAGE</p>
         <p class="mt-4 text-gray-700 text-lg">Redirecting to your dashboard...</p>
     </div>
 
@@ -16,7 +17,7 @@
         setTimeout(() => {
             let redirectUrl = "{{ session('redirect_url', url('/')) }}"; // Get stored redirect URL
             window.location.href = redirectUrl;
-        }, 2000); // 2-second delay before redirect
+        }, 3000); // 2-second delay before redirect
     </script>
 </body>
 </html>

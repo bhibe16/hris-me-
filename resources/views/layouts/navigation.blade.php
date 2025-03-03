@@ -31,34 +31,36 @@
                 </div>
 
                 @if(Auth::user()->role == 'admin')
-                <!-- Admin Notification Icon -->
-                <div class="relative">
-                    <button @click="showAdminNotifications = !showAdminNotifications" class="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3a2.032 2.032 0 01-.595 1.405L4 17h5m6 0a3 3 0 11-6 0m6 0H9"></path>
-                        </svg>
-                        @if(Auth::user()->unreadNotifications->count() > 0)
-                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                                {{ Auth::user()->unreadNotifications->count() }}
-                            </span>
-                        @endif
-                    </button>
-                    <div x-show="showAdminNotifications" @click.outside="showAdminNotifications = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden">
-                        <div class="p-2 text-sm text-gray-700">Admin Notifications</div>
-                        <ul class="divide-y divide-gray-200">
-                            @forelse(Auth::user()->unreadNotifications as $notification)
-                                <li class="p-2 hover:bg-gray-100">
-                                    <a href="{{ $notification->data['url'] }}" onclick="markNotificationAsRead('{{ $notification->id }}')">
-                                        {{ $notification->data['message'] }}
-                                    </a>
-                                </li>
-                            @empty
-                                <li class="p-2 text-gray-500">No new notifications</li>
-                            @endforelse
-                        </ul>
-                        <a href="{{ route('admin.notifications') }}" class="block text-center text-blue-600 hover:underline p-2">View all</a>
-                    </div>
-                </div>
+               <!-- Admin Notification Icon -->
+<div class="relative">
+    <button @click="showAdminNotifications = !showAdminNotifications" class="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3a2.032 2.032 0 01-.595 1.405L4 17h5m6 0a3 3 0 11-6 0m6 0H9"></path>
+        </svg>
+        @if(Auth::user()->unreadNotifications->count() > 0)
+            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                {{ Auth::user()->unreadNotifications->count() }}
+            </span>
+        @endif
+    </button>
+    <div x-show="showAdminNotifications" @click.outside="showAdminNotifications = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg">
+        <div class="p-2 text-sm text-gray-700 border-b">Admin Notifications</div>
+        <div class="max-h-36 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            <ul class="divide-y divide-gray-200">
+                @forelse(Auth::user()->unreadNotifications as $notification)
+                <li class="p-2 hover:bg-gray-100">
+                    <a href="{{ $notification->data['url'] }}" onclick="markNotificationAsRead('{{ $notification->id }}')" class="block text-sm">
+                        {{ $notification->data['message'] }}
+                    </a>
+                </li>
+                @empty
+                <li class="p-2 text-gray-500 text-sm">No new notifications</li>
+                @endforelse
+            </ul>
+        </div>
+        <a href="{{ route('admin.notifications') }}" class="block text-center text-blue-600 hover:underline p-2 border-t">View all</a>
+    </div>
+</div>
                 @elseif(Auth::user()->role == 'employee')
                 <!-- Notification Icon for Employee -->
                 <div class="relative">

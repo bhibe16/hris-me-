@@ -28,21 +28,4 @@ class NotificationController extends Controller
         Auth::user()->notifications()->whereIn('id', $notificationIds)->delete();
         return back()->with('success', 'Selected notifications deleted.');
     }
-
-    // ✅ Store notification with Employee profile picture
-    public function toDatabase($notifiable)
-    {
-        $employee = Employee::where('user_id', auth()->id())->first(); // Get employee record
-
-        return [
-            'message' => auth()->user()->name . " has updated their profile.",
-            'profile' => [
-                'name' => auth()->user()->name,
-                'avatar' => $employee && $employee->profile_picture
-                    ? asset('storage/' . $employee->profile_picture)
-                    : asset('default-avatar.png'),
-            ],
-            'url' => route('employee.profile', auth()->id()),
-        ];
-    }
 }

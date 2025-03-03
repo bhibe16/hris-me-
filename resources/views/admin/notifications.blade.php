@@ -66,23 +66,30 @@
                                     
                                     <!-- Profile Picture -->
                                     <div class="flex-shrink-0 mr-3">
-                                        <img src="{{ $notification->data['profile']['avatar'] ?? asset('default-avatar.png') }}" 
-                                             alt="{{ $notification->data['profile']['name'] ?? 'Admin' }}" 
-                                             class="w-10 h-10 rounded-full">
-                                    </div>
+    @if(!empty($notification->data['profile']['avatar']))
+        <img src="{{ asset('storage/' . $notification->data['profile']['avatar']) }}" 
+             alt="{{ $notification->data['profile']['name'] }}" 
+             class="w-10 h-10 rounded-full">
+    @else
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+            <span class="text-xs">{{ initials($notification->data['profile']['name'] ?? 'A') }}</span>
+        </div>
+    @endif
+</div>
 
                                     <div class="flex-1">
                                         <!-- Notification Message -->
-                                        <a href="{{ $notification->data['url'] ?? '#' }}" class="text-blue-600 hover:underline font-medium">
-                                            {{ $notification->data['message'] ?? 'No message available' }}
-                                        </a>
+                                        <!-- Update the message display -->
+<a href="{{ $notification->data['url'] ?? '#' }}" class="text-blue-600 hover:underline font-medium">
+    {!! $notification->data['message'] ?? 'No message available' !!}
+</a>
 
-                                        <!-- Profile Name and Timestamp -->
-                                        <div class="flex items-center text-sm text-gray-500 mt-1">
-                                            <span>{{ $notification->data['profile']['name'] ?? 'Admin' }}</span>
-                                            <span class="mx-2">•</span>
-                                            <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                        </div>
+<!-- Update the profile name display -->
+<div class="flex items-center text-sm text-gray-500 mt-1">
+    <span>{!! $notification->data['profile']['name'] ?? 'Admin' !!}</span>
+    <span class="mx-2">•</span>
+    <span>{{ $notification->created_at->diffForHumans() }}</span>
+</div> 
                                     </div>
                                 </li>
                             @endforeach
