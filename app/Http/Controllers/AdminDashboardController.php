@@ -11,11 +11,16 @@ class AdminDashboardController extends Controller
     {
         // Get the total number of employees
         $totalEmployees = Employee::count();
-
-        // Pass the data to the dashboard view
-        return view('admin.dashboard', [
-            'totalEmployees' => $totalEmployees
-        ]);
+        $statusCounts = Employee::select('status', \DB::raw('count(*) as count'))
+        ->groupBy('status')
+        ->pluck('count', 'status');
+    
+    // Pass the data to the dashboard view
+    return view('admin.dashboard', [
+        'totalEmployees' => $totalEmployees,
+        'statusCounts' => $statusCounts // Add this line
+    ]);
+      
     }
 }
 

@@ -13,21 +13,33 @@ class EmployeeController extends Controller
     public function index()
     {
         $query = request('search');
+        $status = request('status'); // Get status from query string
     
-        // Filter employees based on search query
-        $employees = Employee::when($query, function ($q) use ($query) {
-            $q->where('user_id', 'like', "%$query%")
-              ->orWhere('first_name', 'like', "%$query%")
-              ->orWhere('last_name', 'like', "%$query%")
-              ->orWhere('status', 'like', "%$query%")
-              ->orWhere('email', 'like', "%$query%")
-              ->orWhereHas('position', function ($subQuery) use ($query) {
-                  $subQuery->where('name', 'like', "%$query%");
-              })
-              ->orWhereHas('department', function ($subQuery) use ($query) {
-                  $subQuery->where('name', 'like', "%$query%");
-              });
-            })->paginate(8)->withQueryString(); // Keep search query when paginating
+        // Ensure status matches database values (approved, reject, pending)
+        if ($status) {
+            $validStatuses = ['approved', 'reject', 'pending'];
+            if (!in_array($status, $validStatuses)) {
+                $status = null; // Prevent invalid status queries
+            }
+        }
+    
+        // Filter employees based on status and search query
+        $employees = Employee::when($status, function ($q) use ($status) {
+                $q->where('status', $status);
+            })
+            ->when($query, function ($q) use ($query) {
+                $q->where('user_id', 'like', "%$query%")
+                  ->orWhere('first_name', 'like', "%$query%")
+                  ->orWhere('last_name', 'like', "%$query%")
+                  ->orWhere('status', 'like', "%$query%")
+                  ->orWhere('email', 'like', "%$query%")
+                  ->orWhereHas('position', function ($subQuery) use ($query) {
+                      $subQuery->where('name', 'like', "%$query%");
+                  })
+                  ->orWhereHas('department', function ($subQuery) use ($query) {
+                      $subQuery->where('name', 'like', "%$query%");
+                  });
+            })->paginate(8)->withQueryString(); // Keep query when paginating
     
         $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
         $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
@@ -44,6 +56,7 @@ class EmployeeController extends Controller
         // Return Blade view if it's a normal request
         return view('admin.employees.index', compact('employees', 'employment', 'educational'));
     }
+    
     
 
     public function destroy($id)
@@ -88,8 +101,6 @@ class EmployeeController extends Controller
 
     return response()->json(['success' => true]);
 }
-
-
 
 
 }

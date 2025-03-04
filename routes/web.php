@@ -141,5 +141,9 @@ Route::get('/loading', function () {
 
 Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 'updateStatus'])
     ->name('employees.update-status');
+    
+    Route::get('/admin/employees/index', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::delete('/admin/employees/index', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    
 
 require __DIR__.'/auth.php';
