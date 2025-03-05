@@ -44,42 +44,47 @@ class EmployeeController extends Controller
         $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
         $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
     
-        // 🔥 Check if request is JSON (API) or standard (Blade)
-        if (request()->wantsJson()) {
-            return response()->json([
-                'employees' => $employees->items(), // Removes pagination metadata
-                'employment' => $employment,
-                'educational' => $educational,
-            ]);
-        }
-    
         // Return Blade view if it's a normal request
         return view('admin.employees.index', compact('employees', 'employment', 'educational'));
     }
+    public function apiIndex()
+    {
+        $employees = Employee::all();
+    
+        return response()->json([
+            'employees' => $employees
+        ], 200);
+    }
+
     
     
 
     public function destroy($id)
-    {
-        $employee = Employee::findOrFail($id);
-        $employee->delete();
+{
+    $employee = Employee::findOrFail($id);
+    $employeeName = $employee->first_name . ' ' . $employee->last_name; // Store name before deleting
+    $employee->delete(); // Soft delete
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee Record deleted successfully.');
-    }
+    return redirect()->route('admin.employees.archived')
+        ->with('success', 'Employee ' . $employeeName . ' deleted successfully.');
+}
 
-    public function archived()
-    {
-        $employees = Employee::onlyTrashed()->paginate(10);
-        return view('admin.employees.archived', compact('employees'));
-    }
+public function archived()
+{
+    $employees = Employee::onlyTrashed()->paginate(10);
+    return view('admin.employees.archived', compact('employees'));
+}
 
-    public function restore($id)
-    {
-        $employee = Employee::onlyTrashed()->findOrFail($id);
-        $employee->restore();
+public function restore($id)
+{
+    $employee = Employee::onlyTrashed()->findOrFail($id);
+    $employee->restore();
 
-        return redirect()->route('admin.employees.index')->with('success', 'Employee record restored successfully.');
-    }
+    return redirect()->route('admin.employees.index')
+        ->with('success', 'Employee ' . $employee->first_name . ' ' . $employee->last_name . ' restored successfully.');
+}
+
+
     public function dashboard()
     {
         // Fetch employee-specific data

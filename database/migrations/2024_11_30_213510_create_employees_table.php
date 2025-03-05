@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id', 5);  // Ensure user_id matches format in users table
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
@@ -28,7 +29,6 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('employment_status')->nullable();
-            $table->string('user_id', 5);  // Ensure user_id matches format in users table
             $table->string('profile_picture')->nullable();
             $table->timestamps();
 

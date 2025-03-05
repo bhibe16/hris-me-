@@ -26,3 +26,11 @@ Route::middleware(['auth:sanctum', 'admin', 'employee.status'])->group(function 
     Route::get('/admin/employees', [EmployeeController::class, 'apiIndex'])->name('api.admin.employees.index');
 });
 
+use App\Http\Controllers\Admin\DocumentController;
+
+Route::get('/documents', [DocumentController::class, 'apiIndex'])->name('api.documents.index');
+
+
+Route::get('/employees', [EmployeeController::class, 'apiIndex'])->name('api.employees.index');;
+
+

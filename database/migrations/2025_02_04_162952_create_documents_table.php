@@ -10,7 +10,9 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id', 5); // Match the format in users table
+            $table->string('user_id', 5);  // Ensure user_id matches format in users table
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('document_type');
             $table->string('file_path');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

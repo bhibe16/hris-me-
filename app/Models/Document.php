@@ -10,7 +10,10 @@ class Document extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
+        'first_name',
+        'last_name',
         'document_type',
         'file_path',
         'status',
@@ -43,14 +46,16 @@ class Document extends Model
         ],
     ];
 
+    // ✅ Relationship with User (Using `user_id` as a string)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id'); // Ensure correct key mapping
     }
 
+    // ✅ Relationship with Employee
     public function employee()
     {
-        return $this->hasOneThrough(Employee::class, User::class, 'id', 'user_id', 'user_id', 'id');
+        return $this->belongsTo(Employee::class, 'user_id', 'user_id'); // Match user_id from employees
     }
 }
 

@@ -5,7 +5,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\EmployeeDashboardController;
-use App\Http\Controllers\Admin\ProfilePictureController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\EmployeeController;
@@ -52,6 +51,7 @@ Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
     Route::put('/employees/{id}/update-status', [EmployeeController::class, 'updateStatus'])->name('employees.updateStatus');
 });
 
+
 // Employee Records Routes
 Route::middleware(['auth', 'employee', 'employee.status'])->group(function () {
     Route::get('/employee/records', [\App\Http\Controllers\Employee\RecordController::class, 'index'])->name('employee.records.index');
@@ -70,10 +70,7 @@ Route::middleware(['auth', 'employee', 'employee.status'])->group(function () {
 });
 
 // Employment History (Admin)
-Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
-    Route::get('/admin/employment', [\App\Http\Controllers\Admin\EmploymentController::class, 'index'])->name('admin.employment.index');
-    Route::get('/employment-history', [\App\Http\Controllers\Admin\EmploymentController::class, 'showHistory']);
-});
+
 
 // Employment History (Employee)
 Route::middleware(['auth', 'employee', 'employee.status'])->group(function () {
@@ -116,8 +113,7 @@ Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
 
 // Profile Picture Upload
 Route::middleware(['auth', 'employee.status'])->group(function () {
-    Route::post('/employee/{id}/profile-picture', [ProfilePictureController::class, 'upload'])->name('employee.profile_picture.upload');
-    Route::delete('/employee/{id}/profile-picture', [ProfilePictureController::class, 'delete'])->name('employee.profile_picture.delete');
+    
 });
 
 // Notifications
@@ -143,7 +139,7 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
     ->name('employees.update-status');
     
     Route::get('/admin/employees/index', [EmployeeController::class, 'index'])->name('employees.index');
-    Route::delete('/admin/employees/index', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+   
     
 
 require __DIR__.'/auth.php';

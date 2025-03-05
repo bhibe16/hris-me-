@@ -63,5 +63,14 @@ class DocumentController extends Controller
     
         return view('admin.documents.view', compact('documentUrl', 'isPdf', 'isDoc', 'isImage', 'document'));
     }
+    public function apiIndex()
+    {
+        $documents = Document::all();
+    
+        return response()->json([
+            'documents' => $documents
+        ], 200);
+    }
+
 }
 

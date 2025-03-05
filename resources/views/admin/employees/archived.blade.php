@@ -22,13 +22,17 @@
                 <!-- Title Section -->
                 <div class="mb-6">
                     <h1 class="text-3xl font-bold mb-2">Archived Employees</h1>
-                </div>
+                
 
-                @if(session('success'))
-                    <div class="bg-green-500 text-white p-3 rounded mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                @if (session('success'))
+    <div class="bg-red-500 text-white p-3 rounded-lg flex items-center">
+        <svg class="w-6 h-6 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        {{ session('success') }}
+    </div>
+@endif
+</div>
 
                 <!-- Table Layout -->
                 <div class="overflow-x-auto bg-white shadow-lg rounded-lg">

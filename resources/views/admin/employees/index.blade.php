@@ -11,10 +11,12 @@
 </head>
 
 <body class="main-content min-h-screen">
+    
     @include('layouts.navigation')
 
     <div class="flex">
         @include('layouts.sidebar')
+
 
         <main class="flex-grow p-16">
             <h1 class="text-3xl font-bold mb-10 -mt-10 text-left">Employee List</h1>
@@ -39,6 +41,14 @@
                         onclick="toggleLayout()">Toggle View</button>
                 </div>
             </div>
+            @if (session('success'))
+    <div class="bg-green-500 text-white p-3 rounded-lg flex items-center">
+        <svg class="w-6 h-6 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+        </svg>
+        {{ session('success') }}
+    </div>
+@endif
 
             <div id="cardLayout" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 @forelse ($employees as $employee)
