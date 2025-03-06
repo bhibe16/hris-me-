@@ -9,6 +9,13 @@
         </div>
     @endif
 
+    <!-- Custom Role Error Message -->
+    @if ($errors->has('role'))
+        <div class="mb-4 text-center text-red-600 bg-red-100 p-4 rounded-md">
+            {{ $errors->first('role') }}
+        </div>
+    @endif
+
     @if(request()->has('session_expired'))
     <p class="text-red-500 text-center">You were logged out due to inactivity.</p>
     @endif

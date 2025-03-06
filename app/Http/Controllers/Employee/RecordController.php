@@ -88,7 +88,7 @@ use App\Models\User;
                 'department_id' => $request->department, // ✅ Store ID, not name
                 'position_id' => $request->position,     // ✅ Store ID, not name
                 'phone' => auth()->user()->phoneNumber,
-                'address' => $request->address,
+                'address' =>auth()->user()->address,
                 'date_of_birth' => $request->date_of_birth,
                 'gender' => $request->gender,
                 'nationality' => $request->nationality,
@@ -102,7 +102,7 @@ use App\Models\User;
 
           
 // Notify admins with THE NEWLY CREATED EMPLOYEE'S DATA - FIXED
-$admins = User::where('role', 'hr3')->get();
+$admins = User::whereIn('role', ['admin', 'hr3'])->get();
 foreach ($admins as $admin) {
     $admin->notify(new EmployeeActivityNotification(
         auth()->user()->name . " Has created a new employee record.",
@@ -162,7 +162,7 @@ foreach ($admins as $admin) {
             $record->update($validatedData);
 
             // After updating the employee record
-$admins = User::where('role', 'hr3')->get();
+            $admins = User::whereIn('role', ['admin', 'hr3'])->get();
 foreach ($admins as $admin) {
     $admin->notify(new EmployeeActivityNotification(
         auth()->user()->name . " Has updated her record.",

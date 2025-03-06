@@ -20,8 +20,8 @@ use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 */
 
 Route::get('/', function () {
-    return view('login');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('auth.login');
+})->name('login');
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -130,15 +130,16 @@ Route::middleware(['auth', 'employee.status'])->group(function () {
     });
 });
 
-// Loading page route
-Route::get('/loading', function () {
+Route::middleware('auth')->get('/loading', function () {
     return view('loading');
 })->name('loading');
 
 Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 'updateStatus'])
     ->name('employees.update-status');
     
-    Route::get('/admin/employees/index', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/admin/employees/index', [EmployeeController::class, 'index'])->name('admin.employees.index');
+        });
    
     
 

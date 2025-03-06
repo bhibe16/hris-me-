@@ -27,24 +27,35 @@ class AuthenticatedSessionController extends Controller
     {
         // Authenticate the user
         $request->authenticate();
-
+    
         // Regenerate the session to prevent session fixation attacks
         $request->session()->regenerate();
-
+    
         // Get the authenticated user
         $user = Auth::user();
-
-
+    
+        // Check if the user has a valid role (Employee, hr3, or admin)
+        if (!in_array($user->role, ['Employee', 'hr3', 'admin'])) {
+            // Log the user out if the role is not valid
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+    
+            // Redirect back to the login page with an error message
+            return redirect()->route('login')->withErrors(['role' => 'Invalid role. Please contact your administrator.']);
+        }
+    
         // Redirect based on role after login
         if ($user->role === 'hr3') {
             return redirect()->route('admin.dashboard'); // Redirect to the admin dashboard
         } elseif ($user->role === 'Employee') {
             return redirect()->route('employee.dashboard'); // Redirect to the employee dashboard
         }
-
+    
         // Default redirection (optional)
-        return redirect()->route('home');
+        return redirect()->route('login')->withErrors(['login' => 'Invalid credentials']);
     }
+    
 
     /**
      * Destroy an authenticated session.
@@ -57,6 +68,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login'); // Or '/login'
     }
 }

@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                @if(Auth::user()->role == 'hr3')
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                <!-- Admin Notification Icon -->
 <div class="relative">
     <button @click="showAdminNotifications = !showAdminNotifications" class="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">

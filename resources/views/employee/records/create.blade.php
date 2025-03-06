@@ -97,7 +97,7 @@
                             </div>
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium">Address</label>
-                                <input type="text" id="address" name="address" value="{{ old('address') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="address" name="address" value="{{ old('address', auth()->user()->address) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                             </div>
                         </div>
                     </div>

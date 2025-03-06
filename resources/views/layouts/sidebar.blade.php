@@ -40,7 +40,7 @@
                 </svg>
             </button>
             <ul id="dashboard-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'hr3')
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('admin.dashboard') }}" class="block py-2 px-4 hover:text-[#7c7c7c28]" onclick="setActive(this)">Admin Dashboard</a></li>
             @elseif (Auth::user()->role == 'Employee')
                 <li><a href="{{ route('employee.dashboard') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Employee dashboard</a></li>
@@ -78,7 +78,7 @@
                 </svg>
             </button>
             <ul id="employees-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'hr3')
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('admin.employees.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Employee Records</a></li>
             @elseif (Auth::user()->role == 'Employee')
                 <li><a href="{{ route('employee.records.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">My records</a></li>
@@ -116,7 +116,7 @@
                 </svg>
             </button>
             <ul id="document-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'hr3')
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('admin.documents.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Submitted Documents</a></li>
             @elseif (Auth::user()->role == 'Employee')
                 <li><a href="{{ route('employee.documents.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Documents</a></li>
@@ -195,7 +195,7 @@
         </li>
 
         <!-- Trash Section (Admin Only) -->
-        @if(auth()->user()->role === 'hr3')
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
             <li>
                 <a 
                     href="{{ route('admin.employees.archived') }}" 
