@@ -17,9 +17,9 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'hr3'])) {
             return $next($request);
-        }
+        }        
 
         // Store intended redirect URL before redirecting to loading page
         session(['redirect_url' => route('employee.dashboard')]);

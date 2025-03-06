@@ -78,7 +78,7 @@
                 </svg>
             </button>
             <ul id="employees-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'admin')
+            @if (Auth::user()->role == 'hr3')
                 <li><a href="{{ route('admin.employees.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Employee Records</a></li>
             @elseif (Auth::user()->role == 'employee')
                 <li><a href="{{ route('employee.records.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">My records</a></li>

@@ -37,7 +37,7 @@ class UserSyncController extends Controller
                             'coverPic'    => $userData['coverPic'] ?? null,
                             'created_at'  => optional($userData)['createdAt'] ?? now(),
                             'updated_at'  => optional($userData)['updatedAt'] ?? now(),
-                            'password'    => Hash::make('defaultpassword'), // Secure default password
+                            'password'    => Hash::make('123'), // Secure default password
                         ]
                     );
                 }
