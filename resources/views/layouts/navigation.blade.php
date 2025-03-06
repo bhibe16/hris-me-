@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                @if(Auth::user()->role == 'admin')
+                @if(Auth::user()->role == 'hr3')
                <!-- Admin Notification Icon -->
 <div class="relative">
     <button @click="showAdminNotifications = !showAdminNotifications" class="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -61,7 +61,7 @@
         <a href="{{ route('admin.notifications') }}" class="block text-center text-blue-600 hover:underline p-2 border-t">View all</a>
     </div>
 </div>
-                @elseif(Auth::user()->role == 'employee')
+                @elseif(Auth::user()->role == 'Employee')
                 <!-- Notification Icon for Employee -->
                 <div class="relative">
                     <!-- Notification Bell Icon -->

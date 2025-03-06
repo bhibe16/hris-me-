@@ -48,7 +48,7 @@ class DocumentController extends Controller
         }
     
         // Show 403 if user is not an admin
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->user()->role !== 'hr3') {
             abort(403, 'Unauthorized access');
         }
     

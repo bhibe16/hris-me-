@@ -93,7 +93,7 @@
                             </div>
                             <div>
                                 <label for="phone" class="block text-sm font-medium">Phone</label>
-                                <input type="text" id="phone" name="phone" value="{{ old('phone') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="phone" name="phone" value="{{ old('phone', auth()->user()->phoneNumber) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly>
                             </div>
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium">Address</label>

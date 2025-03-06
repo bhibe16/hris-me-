@@ -61,7 +61,7 @@
                 <div id="cardLayout" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     @foreach ($documents as $document)
                         @php
-                            $employee = optional($document->employee);
+                            $employee = optional($document->Employee);
                         @endphp
                         <a href="{{ route('admin.documents.view', $document) }}" class="block bg-gray-50 p-5 rounded-xl shadow-lg border border-gray-200 hover:bg-gray-100 transition">
                             <!-- Employee Info -->
@@ -106,7 +106,7 @@
                             <tbody class="divide-y divide-gray-200">
                                 @foreach ($documents as $document)
                                     @php
-                                        $employee = optional($document->employee);
+                                        $employee = optional($document->Employee);
                                     @endphp
                                     <tr class="hover:bg-gray-50 transition cursor-pointer" onclick="window.location='{{ route('admin.documents.view', $document) }}'">
                                         <td class="p-4 flex items-center space-x-3">
