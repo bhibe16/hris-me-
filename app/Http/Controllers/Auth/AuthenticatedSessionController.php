@@ -34,14 +34,9 @@ class AuthenticatedSessionController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Check if the user's account has been terminated
-        if ($user->employee && $user->employee->status === 'Terminated') {
-            Auth::logout(); // Log out the user
-            return redirect()->route('login')->with('error', 'Your account has been terminated by admin.');
-        }
 
         // Redirect based on role after login
-        if ($user->role === 'admin') {
+        if ($user->role === 'hr3') {
             return redirect()->route('admin.dashboard'); // Redirect to the admin dashboard
         } elseif ($user->role === 'employee') {
             return redirect()->route('employee.dashboard'); // Redirect to the employee dashboard
