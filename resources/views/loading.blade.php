@@ -14,10 +14,10 @@
     </div>
 
     <script>
-        setTimeout(() => {
-            let redirectUrl = "{{ session('redirect_url', url('/')) }}"; // Get stored redirect URL
-            window.location.href = redirectUrl;
-        }, 3000); // 2-second delay before redirect
+         setTimeout(() => {
+        let redirectUrl = {!! json_encode(session('redirect_url', url('/'))) !!}; // Ensure proper parsing
+        window.location.href = redirectUrl;
+    }, 3000); // 3-second delay before redirect
     </script>
 </body>
 </html>

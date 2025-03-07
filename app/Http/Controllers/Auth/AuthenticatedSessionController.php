@@ -45,8 +45,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('login')->withErrors(['role' => 'Invalid role. Please contact your administrator.']);
         }
     
-        // Redirect based on role after login
-        if ($user->role === 'hr3') {
+        if ($user->role === 'admin' || $user->role === 'hr3') {
             return redirect()->route('admin.dashboard'); // Redirect to the admin dashboard
         } elseif ($user->role === 'Employee') {
             return redirect()->route('employee.dashboard'); // Redirect to the employee dashboard

@@ -37,6 +37,9 @@ use App\Http\Controllers\UserSyncController;
 
 Route::get('/sync-users', [UserSyncController::class, 'syncUsers'])->name('api.sync-users');
 
+use App\Http\Controllers\API\EmployeeAPIController;
+
+Route::get('/admin/newhiredemp', [EmployeeAPIController::class, 'index'])->name('admin.newhiredemp.index');
 
 
 

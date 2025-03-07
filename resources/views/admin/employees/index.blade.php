@@ -276,13 +276,14 @@
                         </div>
                         <!-- Delete Button and Form -->
                         <div class="mt-6 flex justify-end">
-                            <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this employee?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-                                    Delete Record
-                                </button>
-                            </form>
+                        <form action="{{ url('admin/employees/' . $employee->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+        Delete Record
+    </button>
+</form>
+
                         </div>
                     </div>
                 </div>

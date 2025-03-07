@@ -9,24 +9,29 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        // Check if the user is authenticated
         if (Auth::check()) {
             $user = Auth::user();
 
-            // Convert the roles passed to the middleware to ucfirst to match the case stored in the database
-            $userRole = ucfirst($user->role);
-            $roles = array_map('ucfirst', $roles);
+            // Convert user role and allowed roles to match case
+            $userRole = strtolower($user->role);
+            $roles = array_map('strtolower', $roles);
 
-            // If the user's role is not in the allowed roles, log them out and redirect to login page
-            if (!in_array($userRole, $roles)) {
+            // Allowed system roles
+            $allowedRoles = ['admin', 'hr3', 'Employee'];
+
+            // Check if the user's role is valid
+            if (!in_array($userRole, $allowedRoles)) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-
-                return redirect()->route('login')->withErrors(['role' => 'Invalid role. Please contact your administrator.']);
+                return redirect()->route('login')->withErrors(['role' => 'Invalid role. Access denied.']);
             }
+
+            
+
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()->route('login')->withErrors(['role' => 'Please log in to continue.']);
     }
 }

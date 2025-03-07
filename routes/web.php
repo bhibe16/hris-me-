@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\EmployeeDashboardController;
@@ -34,7 +35,11 @@ Route::middleware('auth')->group(function () {
 // Admin Dashboard Route
 Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/index', [EmployeeAPIController::class, 'index'])->name('admin.index');
+    Route::get('/admin/newhiredemp', [EmployeeAPIController::class, 'index'])->name('admin.newhiredemp.index');
+    Route::prefix('admin','hr3')->group(function () {
+        Route::get('/new-hires', [EmployeeAPIController::class, 'index'])
+             ->name('admin.newhiredemp.index');
+    });
 });
 
 // Employee Dashboard Route

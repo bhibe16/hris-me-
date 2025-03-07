@@ -16,7 +16,7 @@ class EmployeeMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && in_array(Auth::user()->role, ['employee', 'Employee'])) {
+        if (Auth::check() && in_array(Auth::user()->role, ['Employee', 'employee'])) {
             return $next($request);
         }    
 
