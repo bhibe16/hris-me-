@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-content {
+    @apply bg-slate-200 min-h-screen;
+}
+
+.linear-gradient {
+    @apply bg-gradient-to-r from-yellow-300 to-amber-400;
+}
+
+.hover-gradient:hover {
+    @apply bg-gradient-to-r from-yellow-300 to-amber-400;
+}
+/* Add this to your CSS file or <style> tag */
+#sidebar {
+    transition: width 0.3s ease-in-out;
+}
+
+#sidebar.collapsed {
+    width: 64px; /* Adjust this value to match your collapsed sidebar width */
+}
+
+#sidebar.collapsed .sidebar-content {
+    display: none; /* Hide all content except icons */
+}
+
+#sidebar.collapsed ul li span {
+    display: none; /* Hide text when sidebar is collapsed */
+}
+
+#sidebar.collapsed ul li button {
+    justify-content: center; /* Center the icon when collapsed */
+}
+
+#sidebar.collapsed ul li svg {
+    margin-right: 0; /* Remove margin for icons when collapsed */
+}
+
+#sidebar.collapsed .submenu {
+    display: none !important; /* Ensure dropdowns are hidden when collapsed */
+}
+
+#sidebar.collapsed #toggle-icon {
+    transform: rotate(180deg); /* Rotate the toggle icon */
+}
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 3px;
+}
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+    background-color: #f3f4f6;
+}
+
+
+
