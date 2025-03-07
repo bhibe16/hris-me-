@@ -44,6 +44,16 @@
                     <h3 class="text-lg font-semibold text-black mt-3">Total Employees</h3>
                     <p class="text-2xl font-bold text-gray-800 animate-count-up">{{ $totalEmployees }}</p>
                 </div>
+                <!-- Total Departments -->
+<div class="bg-yellow-200 p-6 rounded-lg shadow text-center transition-transform duration-300 hover:scale-105 hover:shadow-lg group">
+    <div class="inline-block p-3 bg-yellow-300 rounded-full transition-colors duration-300 group-hover:bg-yellow-400">
+        <heroicon-outline-building-office class="w-8 h-8 text-gray-800"></heroicon-outline-building-office>
+    </div>
+    <h3 class="text-lg font-semibold text-black mt-3">Total Departments</h3>
+    <p class="text-2xl font-bold text-gray-800 animate-count-up">{{ $totalDepartments }}</p>
+</div>
+
+
                 
                 <!-- Repeat similar structure for other stats -->
                 <!-- Add appropriate icons for each statistic -->

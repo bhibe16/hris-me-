@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\Department;
 
 class AdminDashboardController extends Controller
 {
@@ -18,6 +19,7 @@ class AdminDashboardController extends Controller
     // Pass the data to the dashboard view
     return view('admin.dashboard', [
         'totalEmployees' => $totalEmployees,
+        'totalDepartments' => Department::count(),
         'statusCounts' => $statusCounts // Add this line
     ]);
       
